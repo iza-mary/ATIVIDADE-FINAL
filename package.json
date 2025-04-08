@@ -1,0 +1,27 @@
+{
+  "name": "atividade-final",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iza-mary/ATIVIDADE-FINAL.git"
+  },
+  "keywords": [],
+  "author": "maria izabel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iza-mary/ATIVIDADE-FINAL/issues"
+  },
+  "homepage": "https://github.com/iza-mary/ATIVIDADE-FINAL#readme",
+  "description": "trabalho final",
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.14.0"
+  }
+}

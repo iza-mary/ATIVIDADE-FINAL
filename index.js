@@ -2,9 +2,9 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import session from "express-session";
-import autenticar from "./seguranca/autenticar.js"; // protege as rotas
+import autenticar from "./seguranca/autenticar.js";
 
-// Rotas da API
+
 import rotaPartidos from "./rotas/partidoRota.js";
 import rotaCandidatos from "./rotas/candidatoRota.js";
 
@@ -15,34 +15,31 @@ const app = express();
 const host = '0.0.0.0';
 const porta = 2000;
 
-// Configurações básicas
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Sessão
+// Sessão (30 minutos)
 app.use(
     session({
         secret: "m1Nh4Ch4v3S3cR3t4",
         resave: false,
         saveUninitialized: false,
-        cookie: { maxAge: 1000 * 60 * 15 },
+        cookie: { maxAge: 1000 * 60 * 30 } // 30 minutos
     })
 );
 
-// Arquivos públicos (HTMLs, CSS etc.)
 app.use(express.static("publico"));
 
-// Página inicial (home)
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "publico", "home.html"));
 });
 
-// Página de login
 app.get("/login", (req, res) => {
     res.sendFile(path.join(__dirname, "publico", "login.html"));
 });
 
-// Autenticação
 app.post("/login", (req, res) => {
     const { usuario, email, senha } = req.body;
 
@@ -54,39 +51,41 @@ app.post("/login", (req, res) => {
     }
 });
 
-// Logout
+
 app.get("/logout", (req, res) => {
     req.session.destroy();
     res.redirect("/login");
 });
 
-// Confere sessão
+
 app.get("/sessao", (req, res) => {
     res.json({ autenticado: req.session.autenticado || false });
 });
 
-// Proteger rotas privadas
-app.use("/privado", autenticar);
-app.use("/privado", express.static("privado"));
 
-// Rotas para páginas protegidas
-app.get("/privado/cadastro-partido.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "privado", "cadastro-partido.html"));
+app.use("/privado/scripts", express.static(path.join(__dirname, "privado/scripts")));
+
+app.use("/privado", autenticar);
+app.use("/privado", express.static(path.join(__dirname, "privado")));
+
+
+app.get("/privado/partidos.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "privado", "partidos.html"));
 });
 
-app.get("/privado/cadastro-candidato.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "privado", "cadastro-candidato.html"));
+app.get("/privado/candidatos.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "privado", "candidatos.html"));
 });
 
 app.get("/privado/menu.html", (req, res) => {
     res.sendFile(path.join(__dirname, "privado", "menu.html"));
 });
 
-// Rotas da API
+
 app.use("/api/partidos", rotaPartidos);
 app.use("/api/candidatos", rotaCandidatos);
 
-// Inicia servidor
+// Inicia o servidor
 app.listen(porta, host, () => {
     console.log(`Servidor rodando: http://${host}:${porta}`);
 });

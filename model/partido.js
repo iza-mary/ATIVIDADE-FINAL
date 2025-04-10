@@ -13,38 +13,36 @@ export default class Partido {
         this.#numero = numero;
     }
 
+  
     get id() {
         return this.#id;
-    }
-
-    set id(novoId) {
-        this.#id = novoId;
     }
 
     get nome() {
         return this.#nome;
     }
 
-    set nome(novoNome) {
-        this.#nome = novoNome;
-    }
-
     get sigla() {
         return this.#sigla;
-    }
-
-    set sigla(novaSigla) {
-        this.#sigla = novaSigla;
     }
 
     get numero() {
         return this.#numero;
     }
 
+    set nome(novoNome) {
+        this.#nome = novoNome;
+    }
+
+    set sigla(novaSigla) {
+        this.#sigla = novaSigla;
+    }
+
     set numero(novoNumero) {
         this.#numero = novoNumero;
     }
 
+    // Converter para JSON
     toJSON() {
         return {
             id: this.#id,
@@ -54,28 +52,26 @@ export default class Partido {
         };
     }
 
+    static #partidoDB = new PartidoDB();
+
+    // Métodos de banco de dados
     async gravar() {
-        const partidoDB = new PartidoDB();
-        await partidoDB.gravar(this);
+        await Partido.#partidoDB.gravar(this);
     }
 
     async alterar() {
-        const partidoDB = new PartidoDB();
-        await partidoDB.alterar(this);
+        await Partido.#partidoDB.alterar(this);
     }
 
     async excluir() {
-        const partidoDB = new PartidoDB();
-        await partidoDB.excluir(this);
+        await Partido.#partidoDB.excluir(this);
     }
 
     static async consultar() {
-        const partidoDB = new PartidoDB();
-        return await partidoDB.consultar();
+        return await Partido.#partidoDB.consultar();
     }
 
-    async consultarID() {
-        const partidoDB = new PartidoDB();
-        return await partidoDB.consultarPorID(this.#id);
+    static async consultarPorID(id) {
+        return await Partido.#partidoDB.consultarPorID(id);
     }
 }

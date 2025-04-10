@@ -68,7 +68,7 @@ export default class PartidoControle {
             const { id } = req.body;
 
             if (id) {
-                const partido = new Partido(id);
+                const partido = new Partido(id, null, null, null);
 
                 partido.excluir().then(() => {
                     res.status(200).json({

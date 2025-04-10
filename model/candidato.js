@@ -2,146 +2,93 @@ import CandidatoDB from "../database/candidatosDB.js";
 
 export default class Candidato {
     #cpf;
-    #titulo;
+    #titulo_eleitor;
     #nome;
     #endereco;
-    #numero;
+    #numero_endereco;
     #bairro;
     #cidade;
     #uf;
     #cep;
-    #renda;
+    #renda_mensal;
+    #partidoId;
 
-    constructor(cpf, titulo, nome, endereco, numero, bairro, cidade, uf, cep, renda) {
+    constructor(cpf, titulo_eleitor, nome, endereco, numero_endereco, bairro, cidade, uf, cep, renda_mensal, partidoId) {
         this.#cpf = cpf;
-        this.#titulo = titulo;
+        this.#titulo_eleitor = titulo_eleitor;
         this.#nome = nome;
         this.#endereco = endereco;
-        this.#numero = numero;
+        this.#numero_endereco = numero_endereco;
         this.#bairro = bairro;
         this.#cidade = cidade;
         this.#uf = uf;
         this.#cep = cep;
-        this.#renda = renda;
+        this.#renda_mensal = renda_mensal;
+        this.#partidoId = partidoId;
     }
 
-    get cpf() {
-        return this.#cpf;
-    }
+  
+    get cpf() { return this.#cpf; }
+    get titulo() { return this.#titulo_eleitor; } 
+    get nome() { return this.#nome; }
+    get endereco() { return this.#endereco; }
+    get numero() { return this.#numero_endereco; } 
+    get bairro() { return this.#bairro; }
+    get cidade() { return this.#cidade; }
+    get uf() { return this.#uf; }
+    get cep() { return this.#cep; }
+    get renda() { return this.#renda_mensal; }
+    get partidoId() { return this.#partidoId; }
 
-    set cpf(valor) {
-        this.#cpf = valor;
-    }
+    // Setters
+    set titulo(v) { this.#titulo_eleitor = v; }
+    set nome(v) { this.#nome = v; }
+    set endereco(v) { this.#endereco = v; }
+    set numero(v) { this.#numero_endereco = v; }
+    set bairro(v) { this.#bairro = v; }
+    set cidade(v) { this.#cidade = v; }
+    set uf(v) { this.#uf = v; }
+    set cep(v) { this.#cep = v; }
+    set renda(v) { this.#renda_mensal = v; }
+    set partidoId(v) { this.#partidoId = v; }
 
-    get titulo() {
-        return this.#titulo;
-    }
-
-    set titulo(valor) {
-        this.#titulo = valor;
-    }
-
-    get nome() {
-        return this.#nome;
-    }
-
-    set nome(valor) {
-        this.#nome = valor;
-    }
-
-    get endereco() {
-        return this.#endereco;
-    }
-
-    set endereco(valor) {
-        this.#endereco = valor;
-    }
-
-    get numero() {
-        return this.#numero;
-    }
-
-    set numero(valor) {
-        this.#numero = valor;
-    }
-
-    get bairro() {
-        return this.#bairro;
-    }
-
-    set bairro(valor) {
-        this.#bairro = valor;
-    }
-
-    get cidade() {
-        return this.#cidade;
-    }
-
-    set cidade(valor) {
-        this.#cidade = valor;
-    }
-
-    get uf() {
-        return this.#uf;
-    }
-
-    set uf(valor) {
-        this.#uf = valor;
-    }
-
-    get cep() {
-        return this.#cep;
-    }
-
-    set cep(valor) {
-        this.#cep = valor;
-    }
-
-    get renda() {
-        return this.#renda;
-    }
-
-    set renda(valor) {
-        this.#renda = valor;
-    }
-
+    // Converter para JSON
     toJSON() {
         return {
             cpf: this.#cpf,
-            titulo: this.#titulo,
+            titulo: this.#titulo_eleitor,
             nome: this.#nome,
             endereco: this.#endereco,
-            numero: this.#numero,
+            numero: this.#numero_endereco,
             bairro: this.#bairro,
             cidade: this.#cidade,
             uf: this.#uf,
             cep: this.#cep,
-            renda: this.#renda
+            renda: this.#renda_mensal,
+            partidoId: this.#partidoId
         };
     }
 
+    // Banco de dados
+    static #db = new CandidatoDB();
+
     async gravar() {
-        const db = new CandidatoDB();
-        await db.gravar(this);
+        await Candidato.#db.gravar(this);
     }
 
     async alterar() {
-        const db = new CandidatoDB();
-        await db.alterar(this);
+        await Candidato.#db.alterar(this);
     }
 
     async excluir() {
-        const db = new CandidatoDB();
-        await db.excluir(this);
+        await Candidato.#db.excluir(this);
     }
 
     static async consultar() {
-        const db = new CandidatoDB();
-        return await db.consultar();
+        return await Candidato.#db.consultar();
     }
 
-    async consultarCPF() {
-        const db = new CandidatoDB();
-        return await db.consultarPorCPF(this.#cpf);
+    static async consultarPorCPF(cpf) {
+        return await Candidato.#db.consultarPorCPF(cpf);
     }
 }

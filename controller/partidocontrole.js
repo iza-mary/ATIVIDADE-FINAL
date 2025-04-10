@@ -63,34 +63,42 @@ export default class PartidoControle {
     }
 
     // DELETE - Excluir partido
-    excluir(req, res) {
-        if (req.method === 'DELETE' && req.is("application/json")) {
-            const { id } = req.body;
+   // DELETE - Excluir partido
+excluir(req, res) {
+    if (req.method === 'DELETE' && req.is("application/json")) {
+        const { id } = req.body;
 
-            if (id) {
-                const partido = new Partido(id, null, null, null);
+        if (id) {
+            const partido = new Partido(id, null, null, null);
 
-                partido.excluir().then(() => {
-                    res.status(200).json({
-                        status: true,
-                        mensagem: "Partido excluído com sucesso!"
+            partido.excluir().then(() => {
+                res.status(200).json({
+                    status: true,
+                    mensagem: "Partido excluído com sucesso!"
+                });
+            }).catch(erro => {
+                if (erro.code === 'ER_ROW_IS_REFERENCED_2') {
+                    res.status(400).json({
+                        status: false,
+                        mensagem: "Não é possível excluir este partido, pois ele está vinculado a um ou mais candidatos."
                     });
-                }).catch(erro => {
+                } else {
                     res.status(500).json({
                         status: false,
-                        mensagem: "Erro ao excluir partido: " + erro
+                        mensagem: "Erro ao excluir partido: " + erro.message
                     });
-                });
-            } else {
-                res.status(400).json({
-                    status: false,
-                    mensagem: "Informe o ID do partido a ser excluído!"
-                });
-            }
+                }
+            });
         } else {
-            res.status(400).json({ status: false, mensagem: "Requisição inválida" });
+            res.status(400).json({
+                status: false,
+                mensagem: "Informe o ID do partido a ser excluído!"
+            });
         }
+    } else {
+        res.status(400).json({ status: false, mensagem: "Requisição inválida" });
     }
+}
 
     // GET - Consultar partidos
     consultar(req, res) {

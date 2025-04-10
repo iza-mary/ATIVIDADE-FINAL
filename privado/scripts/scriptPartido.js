@@ -77,9 +77,19 @@ function excluirPartido(id) {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
-    }).then(res => res.json()).then(d => {
+    })
+    .then(res => res.json())
+    .then(d => {
         mostrarMensagem(d.mensagem, d.status ? "success" : "danger");
-        mostrarTabelaPartido();
+
+        // Só atualiza a tabela se foi sucesso
+        if (d.status) {
+            mostrarTabelaPartido();
+        }
+    })
+    .catch(err => {
+        mostrarMensagem("Erro ao excluir partido!", "danger");
+        console.error("Erro ao excluir:", err);
     });
 }
 

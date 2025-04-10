@@ -64,8 +64,13 @@ function mostrarTabelaCandidato() {
                     <td>${c.cpf}</td>
                     <td>${c.titulo}</td>
                     <td>${c.partidoNome || "N/A"}</td>
+                    <td>${c.endereco}</td>
+                    <td>${c.numero}</td>
+                    <td>${c.bairro}</td>
                     <td>${c.cidade}</td>
                     <td>${c.uf}</td>
+                    <td>${c.cep}</td>
+                    <td>R$ ${parseFloat(c.renda).toFixed(2)}</td>
                     <td>
                         <button class="btn btn-sm btn-warning" onclick='editarCandidato(${JSON.stringify(c)})'>✏️</button>
                         <button class="btn btn-sm btn-danger" onclick='excluirCandidato("${c.cpf}")'>🗑️</button>
